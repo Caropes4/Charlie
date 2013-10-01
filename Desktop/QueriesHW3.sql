@@ -9,7 +9,11 @@ where aid in
 
 --2. Get the cities of agents booking an order for customer c002. This time use joins; no subqueries.
 
-
+select a.city
+from agents a, orders o, customers c
+where a.aid = o.aid
+  and o.cid = c.cid
+  and c.cid = 'c002';
 
 --3. Get the pids of products ordered through any agent who makes at least one order for a customer in Kyoto. Use subqueries. (Yes, this is also the same question as on homework #2.)
 
@@ -25,11 +29,20 @@ where aid in
 
 --4. Get the pids of products ordered through any agent who makes at least one order for a customer in Kyoto. Use joins thus time; no subqueries.
 
-
+select distinct o.pid
+from orders o, orders o2, customers c
+where o.aid = o2.aid
+  and o2.cid = c.cid
+  and c.city = 'Kyoto'
+order by o.pid;
 
 --5. Get the names of customers who have never placed an order. Use a subquery.
 
-
+select name
+from customers
+where cid not in
+	(select cid
+	from orders);
 
 --6. Get the names of customers who have never placed an order. Use an outer join.
 
