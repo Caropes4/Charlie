@@ -46,11 +46,18 @@ where cid not in
 
 --6. Get the names of customers who have never placed an order. Use an outer join.
 
-
+select c.name
+from customers c full outer join orders o
+on c.cid = o.cid
+where o.cid is null;
 
 --7. Get the names of customers who placed at least one order through an agent in their city, along with those agent(s) names.
 
-
+select c.name, a.name
+from customers c, orders o, agents a
+where c.cid = o.cid
+  and o.aid = a.aid
+  and c.city = a.city;
 
 --8. Get the names of customers and agents in the same city, along with the name of the city, regardless of whether or not the customer has ever placed an order with that agent.
 
