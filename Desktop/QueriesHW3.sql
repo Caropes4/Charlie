@@ -1,4 +1,4 @@
---1. Get the cities of agents booking an order for customer c002. Use a subquery. (Yes, this is the same question as on homework #2).
+﻿--1. Get the cities of agents booking an order for customer c002. Use a subquery. (Yes, this is the same question as on homework #2).
 
 select city 
 from agents
@@ -61,7 +61,9 @@ where c.cid = o.cid
 
 --8. Get the names of customers and agents in the same city, along with the name of the city, regardless of whether or not the customer has ever placed an order with that agent.
 
-
+select c.name, a.name, a.city
+from customers c, agents a
+where a.city = c.city
 
 --9. Get the name and city of customers who live in the city where the least number of products are made.
 
@@ -77,11 +79,20 @@ where c.cid = o.cid
 
 --12. List the products whose priceUSD is above the average priceUSD.
 
+select p.name
+from products p
+where 
 
+select *
+from products
 
 --13. Show the customer name, pid ordered, and the dollars for all customer orders, sorted by dollars from high to low.
 
-
+select c.name, o.pid, p.priceusd
+from customers c, orders o, products p
+where c.cid = o.cid
+  and o.pid = p.pid
+order by priceusd DESC;
 
 --14. Show all customer names (in order) and their total ordered, and nothing more. Use coalesce to avoid showing NULLs.
 
@@ -89,7 +100,12 @@ where c.cid = o.cid
 
 --15. Show the names of all customers who bought products from agents based in New York along with the names of the products they ordered, and the names of the agents who sold it to them.
 
-
+select c.name, p.name, a.name
+from customers c, products p, agents a, orders o
+where c.cid = o.cid
+  and o.aid = a.aid
+  and o.pid = p.pid
+  and a.city = 'New York'
 
 --16. Write a query to check the accuracy of the dollars column in the Orders table. 
 --	This means calculating Orders.dollars from other data in other tables and then comparing those values to the values in Orders.dollars.
