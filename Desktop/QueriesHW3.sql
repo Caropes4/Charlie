@@ -67,12 +67,15 @@ where a.city = c.city;
 
 --9. Get the name and city of customers who live in the city where the least number of products are made.
 --
-select c.name, c.city
-from customers c, products p, orders o
-where c.cid = o.cid
-  and o.pid = p.pid
-  and 
-
+select name, city
+from customers
+where city =(select city
+	     from products p
+             group by p.city
+	     having count(name) = (select count (name)
+                                   from products
+		                   where city = 'Duluth'))
+		                   
 --10. Get the name and city of customers who live in a city where the most number of products are made.
 --
 select c.name, c.city
@@ -107,10 +110,13 @@ order by dollars DESC;
 
 --14. Show all customer names (in order) and their total ordered, and nothing more. Use coalesce to avoid showing NULLs.
 
-select c.name, COUNT(name)
+select c.name, COUNT(c.name)
 from customers c, orders o
 where c.cid = o.cid
 group by name;
+
+select *
+from orders
 
 --15. Show the names of all customers who bought products from agents based in New York along with the names of the products they ordered, and the names of the agents who sold it to them.
 
