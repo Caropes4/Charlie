@@ -63,40 +63,54 @@ where c.cid = o.cid
 
 select c.name, a.name, a.city
 from customers c, agents a
-where a.city = c.city
+where a.city = c.city;
 
 --9. Get the name and city of customers who live in the city where the least number of products are made.
-
-
+--
+select c.name, c.city
+from customers c, products p, orders o
+where c.cid = o.cid
+  and o.pid = p.pid
+  and 
 
 --10. Get the name and city of customers who live in a city where the most number of products are made.
-
-
+--
+select c.name, c.city
+from customers c, products p, orders o
+where c.cid = o.cid
+  and o.pid = p.pid
+  and 
 
 --11. Get the name and city of customers who live in any city where the most number of products are made.
-
-
+--
+select c.name, c.city
+from customers c, products p, orders o
+where c.cid = o.cid
+  and o.pid = p.pid
+  and 
 
 --12. List the products whose priceUSD is above the average priceUSD.
 
 select p.name
 from products p
-where 
-
-select *
-from products
+where p.priceusd > 
+	(select AVG(p.priceusd)
+	from products p);
 
 --13. Show the customer name, pid ordered, and the dollars for all customer orders, sorted by dollars from high to low.
 
-select c.name, o.pid, p.priceusd
+select c.name, o.pid, o.dollars
 from customers c, orders o, products p
 where c.cid = o.cid
   and o.pid = p.pid
-order by priceusd DESC;
+order by dollars DESC;
 
 --14. Show all customer names (in order) and their total ordered, and nothing more. Use coalesce to avoid showing NULLs.
 
-
+select c.name, COUNT(name)
+from customers c, orders o
+where c.cid = o.cid
+group by name;
 
 --15. Show the names of all customers who bought products from agents based in New York along with the names of the products they ordered, and the names of the agents who sold it to them.
 
@@ -105,11 +119,19 @@ from customers c, products p, agents a, orders o
 where c.cid = o.cid
   and o.aid = a.aid
   and o.pid = p.pid
-  and a.city = 'New York'
+  and a.city = 'New York';
 
 --16. Write a query to check the accuracy of the dollars column in the Orders table. 
 --	This means calculating Orders.dollars from other data in other tables and then comparing those values to the values in Orders.dollars.
 
-
+select o.qty * p.priceUSD * (1 - c.discount/100), o.dollars
+from orders o, products p, customers c
+where o.pid = p.pid
+  and c.cid = o.cid;
 
 --17. Create an error in the dollars column of the Orders table so that you can verify your accuracy checking query.
+
+select o.qty * p.priceUSD * (c.discount/100), o.dollars
+from orders o, products p, customers c
+where o.pid = p.pid
+  and c.cid = o.cid;
